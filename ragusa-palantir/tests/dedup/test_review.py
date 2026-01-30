@@ -26,9 +26,7 @@ def test_run_dedup_stores_candidates_in_db(populated_db):
 
 
 def test_run_dedup_single_source_no_candidates(db_conn):
-    db_conn.execute(
-        "INSERT INTO source_files (id, filename) VALUES (1, 'only.ged')"
-    )
+    db_conn.execute("INSERT INTO source_files (id, filename) VALUES (1, 'only.ged')")
     db_conn.execute(
         "INSERT INTO persons (source_file_id, gedcom_id, given_name, surname, name_raw, sex)"
         " VALUES (1, '@I1@', 'Petrus', 'Gondola', 'Petrus Gondola', 'M')"

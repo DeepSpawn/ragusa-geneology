@@ -4,8 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from ragusa.parser.gedcom_loader import _parse_name, _parse_date
-
+from ragusa.parser.gedcom_loader import _parse_date, _parse_name
 
 # ---------------------------------------------------------------------------
 # _parse_name

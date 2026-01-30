@@ -9,7 +9,6 @@ import pytest
 from ragusa.db.schema import create_schema
 from ragusa.parser.gedcom_reader import GedcomLine
 
-
 # ---------------------------------------------------------------------------
 # Database fixtures
 # ---------------------------------------------------------------------------
@@ -94,14 +93,8 @@ def populated_db(db_conn):
     )
 
     # -- Family children --
-    conn.execute(
-        "INSERT INTO family_children (family_id, child_id, child_order)"
-        " VALUES (1, 3, 1)"
-    )
-    conn.execute(
-        "INSERT INTO family_children (family_id, child_id, child_order)"
-        " VALUES (1, 5, 2)"
-    )
+    conn.execute("INSERT INTO family_children (family_id, child_id, child_order) VALUES (1, 3, 1)")
+    conn.execute("INSERT INTO family_children (family_id, child_id, child_order) VALUES (1, 5, 2)")
 
     # -- Events --
     events = [
@@ -112,7 +105,8 @@ def populated_db(db_conn):
     ]
     for e in events:
         conn.execute(
-            "INSERT INTO events (person_id, family_id, event_type, date_raw, year_min, year_max, place)"
+            "INSERT INTO events "
+            "(person_id, family_id, event_type, date_raw, year_min, year_max, place)"
             " VALUES (?, ?, ?, ?, ?, ?, ?)",
             e,
         )
@@ -139,11 +133,13 @@ def populated_db(db_conn):
 
     # -- Annotations --
     conn.execute(
-        "INSERT INTO annotations (id, note_id, person_id, annotation_type, subtype, value, raw_text)"
+        "INSERT INTO annotations "
+        "(id, note_id, person_id, annotation_type, subtype, value, raw_text)"
         " VALUES (1, 2, 1, 'filiation', 'son', 'Marini de Gondola', 'sin Marini de Gondola')"
     )
     conn.execute(
-        "INSERT INTO annotations (id, note_id, person_id, annotation_type, subtype, value, raw_text)"
+        "INSERT INTO annotations "
+        "(id, note_id, person_id, annotation_type, subtype, value, raw_text)"
         " VALUES (2, 3, 3, 'filiation', 'daughter', 'Petri de Gondola', 'hči Petri de Gondola')"
     )
     conn.execute(

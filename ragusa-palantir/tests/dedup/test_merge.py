@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from ragusa.dedup.merge import merge_persons
 
 
@@ -25,9 +23,7 @@ def test_merge_repoints_family_husband(populated_db):
     )
     populated_db.commit()
     merge_persons(populated_db, keep_id=1, remove_id=6)
-    row = populated_db.execute(
-        "SELECT husband_id FROM families WHERE id = 10"
-    ).fetchone()
+    row = populated_db.execute("SELECT husband_id FROM families WHERE id = 10").fetchone()
     assert row["husband_id"] == 1
 
 
@@ -40,9 +36,7 @@ def test_merge_repoints_family_wife(populated_db):
     )
     populated_db.commit()
     merge_persons(populated_db, keep_id=1, remove_id=6)
-    row = populated_db.execute(
-        "SELECT wife_id FROM families WHERE id = 10"
-    ).fetchone()
+    row = populated_db.execute("SELECT wife_id FROM families WHERE id = 10").fetchone()
     assert row["wife_id"] == 1
 
 
@@ -54,8 +48,7 @@ def test_merge_repoints_children(populated_db):
         " VALUES (10, 2, '@F10@', NULL, NULL)"
     )
     populated_db.execute(
-        "INSERT INTO family_children (family_id, child_id, child_order)"
-        " VALUES (10, 6, 1)"
+        "INSERT INTO family_children (family_id, child_id, child_order) VALUES (10, 6, 1)"
     )
     populated_db.commit()
     merge_persons(populated_db, keep_id=1, remove_id=6)
@@ -73,9 +66,7 @@ def test_merge_copies_missing_names(populated_db):
     )
     populated_db.commit()
     merge_persons(populated_db, keep_id=1, remove_id=6)
-    names = populated_db.execute(
-        "SELECT name_raw FROM person_names WHERE person_id = 1"
-    ).fetchall()
+    names = populated_db.execute("SELECT name_raw FROM person_names WHERE person_id = 1").fetchall()
     raw_names = [r["name_raw"] for r in names]
     assert "Petar Gundulić from source 2" in raw_names
 
@@ -114,8 +105,7 @@ def test_merge_fills_dates_from_removed(populated_db):
 def test_merge_logs_to_dedup_candidates(populated_db):
     merge_persons(populated_db, keep_id=1, remove_id=6)
     row = populated_db.execute(
-        "SELECT status FROM dedup_candidates"
-        " WHERE person_a_id = 1 AND person_b_id = 6"
+        "SELECT status FROM dedup_candidates WHERE person_a_id = 1 AND person_b_id = 6"
     ).fetchone()
     assert row is not None
     assert row["status"] == "confirmed_match"

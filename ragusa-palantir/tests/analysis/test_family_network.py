@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from ragusa.analysis.family_network import (
     find_kinship_path,
     get_endogamy_rate,
@@ -11,7 +9,6 @@ from ragusa.analysis.family_network import (
     get_marriage_frequency_matrix,
     get_marriage_network,
 )
-
 
 # ---------------------------------------------------------------------------
 # get_marriage_alliances

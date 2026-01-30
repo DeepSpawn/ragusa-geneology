@@ -6,11 +6,9 @@ import pytest
 
 from ragusa.parser.note_parser import (
     ParsedNote,
-    SourceRef,
     _extract_year_range,
     parse_note_block,
 )
-
 
 # ---------------------------------------------------------------------------
 # _extract_year_range
@@ -277,10 +275,12 @@ def test_reclusa():
 
 
 def test_marriage_second():
-    results = parse_note_block([
-        "RESEARCH NOTES:",
-        "drugič poročena 1315 z Marinus Sorgo",
-    ])
+    results = parse_note_block(
+        [
+            "RESEARCH NOTES:",
+            "drugič poročena 1315 z Marinus Sorgo",
+        ]
+    )
     ann = _get_research_annotations(results)
     assert ann[0].annotation_type == "alt_marriage"
     assert ann[0].subtype == "second_marriage"
@@ -289,10 +289,12 @@ def test_marriage_second():
 
 
 def test_marriage_first():
-    results = parse_note_block([
-        "RESEARCH NOTES:",
-        "prvič poročena 1290 z Petrus Gondola",
-    ])
+    results = parse_note_block(
+        [
+            "RESEARCH NOTES:",
+            "prvič poročena 1290 z Petrus Gondola",
+        ]
+    )
     ann = _get_research_annotations(results)
     assert ann[0].annotation_type == "alt_marriage"
     assert ann[0].subtype == "first_marriage"
@@ -378,10 +380,12 @@ def test_unrecognized_falls_to_other():
 
 def test_combined_filiation_marriage():
     """Filiation + marriage on one line should produce 2 annotations."""
-    results = parse_note_block([
-        "RESEARCH NOTES:",
-        "hči Mathie de Balaca, drugič poročena 1279 z Petrus de Dersa",
-    ])
+    results = parse_note_block(
+        [
+            "RESEARCH NOTES:",
+            "hči Mathie de Balaca, drugič poročena 1279 z Petrus de Dersa",
+        ]
+    )
     ann = _get_research_annotations(results)
     types = {a.annotation_type for a in ann}
     assert "filiation" in types

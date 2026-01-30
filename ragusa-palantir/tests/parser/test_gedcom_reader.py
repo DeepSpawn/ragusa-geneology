@@ -2,12 +2,7 @@
 
 from __future__ import annotations
 
-import re
-
-import pytest
-
-from ragusa.parser.gedcom_reader import GedcomLine, _LINE_RE, detect_charset, parse_gedcom_file
-
+from ragusa.parser.gedcom_reader import _LINE_RE, detect_charset, parse_gedcom_file
 
 # ---------------------------------------------------------------------------
 # _LINE_RE regex tests
@@ -88,11 +83,7 @@ def test_detect_charset_empty_file(tmp_path):
 def test_parse_gedcom_file_basic(tmp_path):
     f = tmp_path / "test.ged"
     f.write_text(
-        "0 HEAD\n"
-        "1 CHAR ASCII\n"
-        "0 @I1@ INDI\n"
-        "1 NAME Petrus Gondola\n"
-        "0 TRLR\n",
+        "0 HEAD\n1 CHAR ASCII\n0 @I1@ INDI\n1 NAME Petrus Gondola\n0 TRLR\n",
         encoding="ascii",
     )
     lines = parse_gedcom_file(str(f), "ASCII")
@@ -107,13 +98,11 @@ def test_parse_gedcom_file_basic(tmp_path):
 def test_parse_gedcom_file_malformed_line(tmp_path):
     f = tmp_path / "test.ged"
     f.write_text(
-        "0 HEAD\n"
-        "not a valid line\n"
-        "0 TRLR\n",
+        "0 HEAD\nnot a valid line\n0 TRLR\n",
         encoding="ascii",
     )
     lines = parse_gedcom_file(str(f), "ASCII")
-    malformed = [l for l in lines if l.tag == "_INVALID"]
+    malformed = [line for line in lines if line.tag == "_INVALID"]
     assert len(malformed) == 1
     assert malformed[0].level == 0
 

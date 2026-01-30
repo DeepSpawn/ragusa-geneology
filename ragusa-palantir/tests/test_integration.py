@@ -129,14 +129,7 @@ def test_load_pipeline_name_parsing(tmp_path, integration_db):
 def test_load_pipeline_encoding_normalization(tmp_path, integration_db):
     """ANSEL encoding artifacts should be normalized in names."""
     # Write bytes with ANSEL charset declaration and \xd9$ sequence
-    content = (
-        b"0 HEAD\n"
-        b"1 CHAR ANSEL\n"
-        b"0 @I1@ INDI\n"
-        b"1 NAME h\xd9$i Gondola\n"
-        b"1 SEX M\n"
-        b"0 TRLR\n"
-    )
+    content = b"0 HEAD\n1 CHAR ANSEL\n0 @I1@ INDI\n1 NAME h\xd9$i Gondola\n1 SEX M\n0 TRLR\n"
     f = tmp_path / "test.ged"
     f.write_bytes(content)
 

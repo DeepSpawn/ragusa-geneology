@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import pytest
-
 from ragusa.parser.gedcom_reader import GedcomLine
 from ragusa.parser.gedcom_tree import GedcomRecord, build_tree
 

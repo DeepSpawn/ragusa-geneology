@@ -6,7 +6,6 @@ import pytest
 
 from ragusa.analysis.prosopography import _ordinal, build_profile, search_persons
 
-
 # ---------------------------------------------------------------------------
 # _ordinal
 # ---------------------------------------------------------------------------

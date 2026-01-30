@@ -8,7 +8,6 @@ import pytest
 
 from ragusa.db.schema import create_schema
 
-
 EXPECTED_TABLES = {
     "source_files",
     "persons",
@@ -40,9 +39,7 @@ def test_create_schema_idempotent(db_conn):
 
 
 def test_persons_table_sex_constraint(db_conn):
-    db_conn.execute(
-        "INSERT INTO source_files (id, filename) VALUES (1, 'test.ged')"
-    )
+    db_conn.execute("INSERT INTO source_files (id, filename) VALUES (1, 'test.ged')")
     with pytest.raises(sqlite3.IntegrityError):
         db_conn.execute(
             "INSERT INTO persons (source_file_id, gedcom_id, name_raw, sex)"
@@ -59,9 +56,7 @@ def test_foreign_key_enforcement(db_conn):
 
 
 def test_unique_constraint_gedcom_id(db_conn):
-    db_conn.execute(
-        "INSERT INTO source_files (id, filename) VALUES (1, 'test.ged')"
-    )
+    db_conn.execute("INSERT INTO source_files (id, filename) VALUES (1, 'test.ged')")
     db_conn.execute(
         "INSERT INTO persons (source_file_id, gedcom_id, name_raw, sex)"
         " VALUES (1, '@I1@', 'Test', 'M')"

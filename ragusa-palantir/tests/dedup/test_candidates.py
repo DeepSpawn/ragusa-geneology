@@ -10,7 +10,6 @@ from ragusa.dedup.candidates import (
     get_canonical_surname,
 )
 
-
 # ---------------------------------------------------------------------------
 # get_canonical_surname
 # ---------------------------------------------------------------------------
@@ -41,9 +40,7 @@ def test_get_canonical_surname_case_sensitive():
 
 def test_generate_candidates_needs_two_source_files(db_conn):
     """With only one source file, no candidates should be generated."""
-    db_conn.execute(
-        "INSERT INTO source_files (id, filename) VALUES (1, 'only.ged')"
-    )
+    db_conn.execute("INSERT INTO source_files (id, filename) VALUES (1, 'only.ged')")
     db_conn.execute(
         "INSERT INTO persons (source_file_id, gedcom_id, given_name, surname, name_raw, sex)"
         " VALUES (1, '@I1@', 'Petrus', 'Gondola', 'Petrus Gondola', 'M')"

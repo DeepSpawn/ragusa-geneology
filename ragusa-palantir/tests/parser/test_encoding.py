@@ -6,7 +6,6 @@ import pytest
 
 from ragusa.parser.encoding import get_python_encoding, normalize_text
 
-
 # ---------------------------------------------------------------------------
 # get_python_encoding
 # ---------------------------------------------------------------------------
