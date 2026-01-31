@@ -8,6 +8,7 @@ dependencies = []
 [project.optional-dependencies]
 analysis = ["networkx", "matplotlib"]
 dev = ["pytest", "ruff"]
+pdf = ["pdfplumber"]
 
 [project.scripts]
 ragusa = "ragusa.cli:main"
