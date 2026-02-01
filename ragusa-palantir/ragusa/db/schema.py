@@ -224,6 +224,47 @@ CREATE TABLE IF NOT EXISTS dedup_candidates (
 
 CREATE INDEX IF NOT EXISTS idx_dedup_status ON dedup_candidates(status);
 CREATE INDEX IF NOT EXISTS idx_dedup_score ON dedup_candidates(score DESC);
+
+-- ============================================================
+-- EXTENSION: Politically Active Men (1440-1490)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS politically_active_men (
+    id                  INTEGER PRIMARY KEY,
+    surname             TEXT NOT NULL,
+    name                TEXT NOT NULL,
+    father              TEXT,
+    grandfather         TEXT,
+    hackenberg_number   TEXT,
+    entry_year          TEXT,
+    entry_source        TEXT,
+    end_year            TEXT,
+    end_type            TEXT,
+    notes               TEXT,
+    person_id           INTEGER REFERENCES persons(id),
+    match_score         REAL,
+    match_status        TEXT DEFAULT 'unmatched'
+);
+
+CREATE INDEX IF NOT EXISTS idx_pa_surname ON politically_active_men(surname);
+CREATE INDEX IF NOT EXISTS idx_pa_person ON politically_active_men(person_id);
+CREATE INDEX IF NOT EXISTS idx_pa_status ON politically_active_men(match_status);
+
+CREATE TABLE IF NOT EXISTS pa_match_candidates (
+    id              INTEGER PRIMARY KEY,
+    pa_id           INTEGER NOT NULL REFERENCES politically_active_men(id),
+    person_id       INTEGER NOT NULL REFERENCES persons(id),
+    score           REAL NOT NULL,
+    name_score      REAL,
+    father_score    REAL,
+    date_score      REAL,
+    grandfather_score REAL,
+    status          TEXT DEFAULT 'pending',
+    UNIQUE(pa_id, person_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_pa_candidates_pa ON pa_match_candidates(pa_id);
+CREATE INDEX IF NOT EXISTS idx_pa_candidates_score ON pa_match_candidates(score DESC);
+CREATE INDEX IF NOT EXISTS idx_pa_candidates_status ON pa_match_candidates(status);
 """
 
 

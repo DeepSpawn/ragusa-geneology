@@ -89,6 +89,25 @@ def main():
     review_parser = subparsers.add_parser("dedup-review", help="Show dedup review queue")
     review_parser.add_argument("--limit", type=int, default=50)
 
+    # pa-load
+    pa_load_parser = subparsers.add_parser(
+        "pa-load", help="Load politically active men CSV into database"
+    )
+    pa_load_parser.add_argument("--csv", help="CSV file path (default: data/politically_active_men.csv)")
+
+    # pa-match
+    pa_match_parser = subparsers.add_parser(
+        "pa-match", help="Match PA entries to GEDCOM persons"
+    )
+    pa_match_parser.add_argument("--auto-threshold", type=float, default=0.85)
+    pa_match_parser.add_argument("--review-threshold", type=float, default=0.50)
+
+    # pa-review
+    pa_review_parser = subparsers.add_parser(
+        "pa-review", help="Show PA match review queue"
+    )
+    pa_review_parser.add_argument("--limit", type=int, default=50)
+
     args = parser.parse_args()
 
     if not args.command:
@@ -124,6 +143,12 @@ def main():
             _cmd_dedup(conn, args)
         elif args.command == "dedup-review":
             _cmd_dedup_review(conn, args)
+        elif args.command == "pa-load":
+            _cmd_pa_load(conn, args)
+        elif args.command == "pa-match":
+            _cmd_pa_match(conn, args)
+        elif args.command == "pa-review":
+            _cmd_pa_review(conn, args)
     finally:
         conn.close()
 
@@ -377,6 +402,33 @@ def _cmd_dedup_review(conn, args):
     from .dedup.review import print_review_queue
 
     print_review_queue(conn, limit=args.limit)
+
+
+def _cmd_pa_load(conn, args):
+    from .pa.loader import DEFAULT_CSV_PATH, load_pa_csv
+
+    create_schema(conn)
+    csv_path = args.csv or DEFAULT_CSV_PATH
+    count = load_pa_csv(conn, csv_path)
+    print(f"Loaded {count} politically active men from {csv_path}")
+
+
+def _cmd_pa_match(conn, args):
+    from .pa.review import run_pa_matching
+
+    create_schema(conn)
+    run_pa_matching(
+        conn,
+        auto_threshold=args.auto_threshold,
+        review_threshold=args.review_threshold,
+        verbose=True,
+    )
+
+
+def _cmd_pa_review(conn, args):
+    from .pa.review import print_pa_review_queue
+
+    print_pa_review_queue(conn, limit=args.limit)
 
 
 if __name__ == "__main__":

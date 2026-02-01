@@ -22,6 +22,8 @@ EXPECTED_TABLES = {
     "documents",
     "document_persons",
     "dedup_candidates",
+    "politically_active_men",
+    "pa_match_candidates",
 }
 
 
